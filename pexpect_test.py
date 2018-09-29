@@ -46,15 +46,34 @@ def register_participant_account(process, usr_name):
     standard_input(process, 'holding reg --name /jars/choc_chip --account /account --asset //mkt/asset/cookie/choc_chip')
     mining(process)
     print('Register the participant and account.')
+
+def create_exchange_offer(usr_name_seller, num_of_grocery_sell, ratio, usr_name_buyer, num_of_grocery_buy):
+    n_ratio = int(1/ratio)
+    seller_p = open_cli(usr_name_seller)
+    buyer_p = open_cli(usr_name_buyer)
+
+    mining(seller_p)
+    standard_input(seller_p, 'holding reg --name /batches/choc_chip001 --account /account --asset //mkt/asset/cookie/choc_chip --count %d'%num_of_grocery_sell)
+    mining(seller_p)
+    standard_input(seller_p, 'exchangeoffer reg --output /batches/choc_chip001 --input /USD --ratio %d 1 --name /choc_chip_sale'%n_ratio)
+    mining(seller_p)
+
+    standard_input(buyer_p, 'exchange --type ExchangeOffer --src /USD --dst /jars/choc_chip --offers //%s/choc_chip_sale --count %d'\
+        %(usr_name_seller, num_of_grocery_buy))
+    mining(buyer_p)
+    
+    close_cli(seller_p, usr_name_seller)
+    close_cli(buyer_p, usr_name_buyer)
+    
     
 
 if __name__ == '__main__':
-    usr_name = 'test_6'
-    key_gen(usr_name)
-    p = open_cli(usr_name)
-    register_participant_account(p, usr_name)
-    
-    close_cli(p, usr_name)
+    usr_name = 'test_8'
+    #key_gen(usr_name)
+    #p = open_cli(usr_name)
+    #register_participant_account(p, usr_name)
+    #close_cli(p, usr_name)
+    create_exchange_offer('test_8', 10, 0.5, 'test_7', 2)
     #usr_cli_dict = {}
     #usr_cli_dict['bob'] = open_cli('bob')
     #p = usr_cli_dict.get('bob')
