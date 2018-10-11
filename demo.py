@@ -23,7 +23,7 @@ sim_config = {
 }
 
 START = '2014-01-01 00:00:00'
-END = 24 * 3600  # 1 day
+END = 1800  # 1 day
 PV_DATA = 'data/pv_10kw.csv'
 PROFILE_FILE = 'data/profiles.data.gz'
 GRID_NAME = 'demo_lv_grid'

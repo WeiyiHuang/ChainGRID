@@ -16,10 +16,12 @@ if __name__ == "__main__":
         
 
     for entity in list(series_dataset.keys()):
-        print('#'*100)
-        print(entity)
-        tmp = series_dataset[entity]
-        print(list(tmp.keys()))
-        for ele in list(tmp.keys()):
-            print(tmp[ele][-60])
-            print(tmp[ele].shape)
+        if 'node_d9' in entity:
+            print('#'*100)
+            print(entity)
+            tmp = series_dataset[entity]
+            print(list(tmp.keys()))
+            for ele in list(tmp.keys()):
+                print(tmp[ele].shape)
+                for i in range(tmp[ele].shape[0]):
+                    print(tmp[ele][i])
