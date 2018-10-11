@@ -39,10 +39,10 @@ def register_participant_account(process, usr_name):
     standard_input(process, 'participant reg --name %s'%usr_name)
     standard_input(process, 'account reg --name /account')
     mining(process)
-    standard_input(process, 'holding reg --name /USD --account /account --asset //mkt/asset/currency/USD')
+    standard_input(process, 'holding reg --name /RMB --account /account --asset //mkt/asset/currency/RMB')
     standard_input(process, 'holding reg --name /holding/token --count 1 --account /account --asset //marketplace/asset/token')
     mining(process)
-    standard_input(process, 'exchange --type SellOffer --src /holding/token --dst /USD --offers //mkt/offer/provision/USD --count 1')
+    standard_input(process, 'exchange --type SellOffer --src /holding/token --dst /RMB --offers //mkt/offer/provision/RMB --count 1')
     standard_input(process, 'holding reg --name /jars/choc_chip --account /account --asset //mkt/asset/cookie/choc_chip')
     mining(process)
     print('Register the participant and account.')
@@ -55,10 +55,10 @@ def create_exchange_offer(usr_name_seller, num_of_grocery_sell, ratio, usr_name_
     mining(seller_p)
     standard_input(seller_p, 'holding reg --name /batches/choc_chip001 --account /account --asset //mkt/asset/cookie/choc_chip --count %d'%num_of_grocery_sell)
     mining(seller_p)
-    standard_input(seller_p, 'exchangeoffer reg --output /batches/choc_chip001 --input /USD --ratio %d 1 --name /choc_chip_sale'%n_ratio)
+    standard_input(seller_p, 'exchangeoffer reg --output /batches/choc_chip001 --input /RMB --ratio %d 1 --name /choc_chip_sale'%n_ratio)
     mining(seller_p)
 
-    standard_input(buyer_p, 'exchange --type ExchangeOffer --src /USD --dst /jars/choc_chip --offers //%s/choc_chip_sale --count %d'\
+    standard_input(buyer_p, 'exchange --type ExchangeOffer --src /RMB --dst /jars/choc_chip --offers //%s/choc_chip_sale --count %d'\
         %(usr_name_seller, num_of_grocery_buy))
     mining(buyer_p)
     
