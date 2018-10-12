@@ -47,15 +47,15 @@ def register_participant_account(process, usr_name):
     mining(process)
     print('Register the participant and account.')
 
-def create_exchange_offer(usr_name_seller, num_of_grocery_sell, ratio, usr_name_buyer, num_of_grocery_buy):
+def create_exchange_offer(idx, usr_name_seller, num_of_grocery_sell, ratio, usr_name_buyer, num_of_grocery_buy):
     n_ratio = int(1/ratio)
     seller_p = open_cli(usr_name_seller)
     buyer_p = open_cli(usr_name_buyer)
 
     mining(seller_p)
-    standard_input(seller_p, 'holding reg --name /batches/choc_chip001 --account /account --asset //mkt/asset/cookie/choc_chip --count %d'%num_of_grocery_sell)
+    standard_input(seller_p, 'holding reg --name /batches/choc_chip00%d --account /account --asset //mkt/asset/cookie/choc_chip --count %d'%(idx, num_of_grocery_sell))
     mining(seller_p)
-    standard_input(seller_p, 'exchangeoffer reg --output /batches/choc_chip001 --input /RMB --ratio %d 1 --name /choc_chip_sale'%n_ratio)
+    standard_input(seller_p, 'exchangeoffer reg --output /batches/choc_chip00%d --input /RMB --ratio %d 1 --name /choc_chip_sale_%d'%(idx, n_ratio, idx))
     mining(seller_p)
 
     standard_input(buyer_p, 'exchange --type ExchangeOffer --src /RMB --dst /jars/choc_chip --offers //%s/choc_chip_sale --count %d'\

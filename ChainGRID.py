@@ -1,4 +1,5 @@
 import json
+import datetime
 import random
 import mosaik
 from mosaik.util import connect_randomly, connect_many_to_one
@@ -25,7 +26,7 @@ sim_config = {
 
 # start time, duration, config file
 START = '2014-01-01 00:00:00'
-DUR = 24 * 3600  # 1 day
+DUR = 3600  # 1 day
 PERIOD = 900 # 15 mins
 NUM_OF_SIM = DUR / PERIOD
 PV_DATA = 'data/pv_10kw.csv'
@@ -63,16 +64,25 @@ def read_config_file():
         branch_link_info[branch[0]] = (branch[1], branch[2])
     return bus_ids, branch_link_info
 
-def transactions_between_nodes():
-    create_exchange_offer('test_8', 10, 0.5, 'test_7', 2)
+def transactions_between_nodes(test_id, idx):
+    branch_flow = read_mosaik_hdf5.read('branch')
+    print(branch_flow)
+    for branch in branch_flow.keys():
+        print(branch)
+        sawtooth_client_interact.create_exchange_offer(idx, branch_link_info[branch][0] + '_' + test_id, int(branch_flow[branch][0]), PRICE_RATIO, 
+                branch_link_info[branch][1] + '_' + test_id, int(-branch_flow[branch][1]))
 
 if __name__ == '__main__':
-    register_nodes('0')
-#    bus_ids, branch_link_info = read_config_file()
-#    run_mosaik_demo.main(sim_config, START, PERIOD, PV_DATA, PROFILE_FILE, GRID_NAME, GRID_FILE)
-#    branch_flow = read_mosaik_hdf5.read('branch')
-#    print(branch_flow)
-#    for branch in branch_flow.keys():
-#        print(branch)
-#        sawtooth_client_interact.create_exchange_offer(branch_link_info[branch][0], int(branch_flow[branch][0]), PRICE_RATIO, 
-#                branch_link_info[branch][1], int(-branch_flow[branch][1]))
+    #register_nodes('0')
+    for i in range(int(NUM_OF_SIM)):
+        start_time = datetime.datetime.strptime(START, "%Y-%m-%d %H:%M:%S")
+        print(start_time)
+        start_time += datetime.timedelta(seconds=900*i)
+        print(start_time)
+        NEW_START = start_time.strftime("%Y-%m-%d %H:%M:%S")
+        print(NEW_START)
+        print('#'*100)
+        print('A new simulation!')
+        bus_ids, branch_link_info = read_config_file()
+        run_mosaik_demo.main(sim_config, NEW_START, PERIOD, PV_DATA, PROFILE_FILE, GRID_NAME, GRID_FILE)
+        transactions_between_nodes('0', i)
