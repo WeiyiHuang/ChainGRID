@@ -26,7 +26,7 @@ sim_config = {
 
 # start time, duration, config file
 START = '2014-01-01 00:00:00'
-DUR = 3600  # 1 day
+DUR = 3600  # 1 hour
 PERIOD = 900 # 15 mins
 NUM_OF_SIM = DUR / PERIOD
 PV_DATA = 'data/pv_10kw.csv'
@@ -73,7 +73,7 @@ def transactions_between_nodes(test_id, idx):
                 branch_link_info[branch][1] + '_' + test_id, int(-branch_flow[branch][1]))
 
 if __name__ == '__main__':
-    #register_nodes('0')
+    #register_nodes('1')
     for i in range(int(NUM_OF_SIM)):
         start_time = datetime.datetime.strptime(START, "%Y-%m-%d %H:%M:%S")
         print(start_time)
@@ -85,4 +85,4 @@ if __name__ == '__main__':
         print('A new simulation!')
         bus_ids, branch_link_info = read_config_file()
         run_mosaik_demo.main(sim_config, NEW_START, PERIOD, PV_DATA, PROFILE_FILE, GRID_NAME, GRID_FILE)
-        transactions_between_nodes('0', i)
+        transactions_between_nodes('1', i)

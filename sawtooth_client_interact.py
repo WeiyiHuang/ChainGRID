@@ -58,8 +58,8 @@ def create_exchange_offer(idx, usr_name_seller, num_of_grocery_sell, ratio, usr_
     standard_input(seller_p, 'exchangeoffer reg --output /batches/choc_chip00%d --input /RMB --ratio %d 1 --name /choc_chip_sale_%d'%(idx, n_ratio, idx))
     mining(seller_p)
 
-    standard_input(buyer_p, 'exchange --type ExchangeOffer --src /RMB --dst /jars/choc_chip --offers //%s/choc_chip_sale --count %d'\
-        %(usr_name_seller, num_of_grocery_buy))
+    standard_input(buyer_p, 'exchange --type ExchangeOffer --src /RMB --dst /jars/choc_chip --offers //%s/choc_chip_sale_%d --count %d'\
+        %(usr_name_seller, idx, num_of_grocery_buy))
     mining(buyer_p)
     
     close_cli(seller_p, usr_name_seller)
