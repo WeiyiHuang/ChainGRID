@@ -64,25 +64,30 @@ def read_config_file():
         branch_link_info[branch[0]] = (branch[1], branch[2])
     return bus_ids, branch_link_info
 
-def transactions_between_nodes(test_id, idx):
+def transactions_between_nodes(test_id, bus_dict):
     branch_flow = read_mosaik_hdf5.read('branch')
     print(branch_flow)
     for branch in branch_flow.keys():
         print(branch)
+        idx = bus_dict.get(branch_link_info[branch][0])
+        bus_dict[branch_link_info[branch][0]] = bus_dict.get(branch_link_info[branch][0]) + 1
         sawtooth_client_interact.create_exchange_offer(idx, branch_link_info[branch][0] + '_' + test_id, int(branch_flow[branch][0]), PRICE_RATIO, 
                 branch_link_info[branch][1] + '_' + test_id, int(-branch_flow[branch][1]))
 
 if __name__ == '__main__':
     #register_nodes('1')
-    for i in range(int(NUM_OF_SIM)):
-        start_time = datetime.datetime.strptime(START, "%Y-%m-%d %H:%M:%S")
-        print(start_time)
-        start_time += datetime.timedelta(seconds=900*i)
-        print(start_time)
-        NEW_START = start_time.strftime("%Y-%m-%d %H:%M:%S")
-        print(NEW_START)
-        print('#'*100)
-        print('A new simulation!')
-        bus_ids, branch_link_info = read_config_file()
-        run_mosaik_demo.main(sim_config, NEW_START, PERIOD, PV_DATA, PROFILE_FILE, GRID_NAME, GRID_FILE)
-        transactions_between_nodes('1', i)
+    bus_ids, branch_link_info = read_config_file()
+    bus_dict = {}
+    for bus in bus_ids:
+        bus_dict[bus] = 0
+    #for i in range(int(NUM_OF_SIM)):
+    #    start_time = datetime.datetime.strptime(START, "%Y-%m-%d %H:%M:%S")
+    #    print(start_time)
+    #    start_time += datetime.timedelta(seconds=900*i)
+    #    print(start_time)
+    #    NEW_START = start_time.strftime("%Y-%m-%d %H:%M:%S")
+    #    print(NEW_START)
+    #    print('#'*100)
+    #    print('A new simulation!')
+    #    run_mosaik_demo.main(sim_config, NEW_START, PERIOD, PV_DATA, PROFILE_FILE, GRID_NAME, GRID_FILE)
+    #    transactions_between_nodes('1', bus_dict)
