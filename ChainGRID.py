@@ -1,6 +1,7 @@
 import json
 import datetime
 import random
+from optparse import OptionParser
 import mosaik
 from mosaik.util import connect_randomly, connect_many_to_one
 import sawtooth_client_interact
@@ -75,19 +76,29 @@ def transactions_between_nodes(test_id, bus_dict):
                 branch_link_info[branch][1] + '_' + test_id, int(-branch_flow[branch][1]))
 
 if __name__ == '__main__':
-    #register_nodes('1')
-    bus_ids, branch_link_info = read_config_file()
-    bus_dict = {}
-    for bus in bus_ids:
-        bus_dict[bus] = 0
-    #for i in range(int(NUM_OF_SIM)):
-    #    start_time = datetime.datetime.strptime(START, "%Y-%m-%d %H:%M:%S")
-    #    print(start_time)
-    #    start_time += datetime.timedelta(seconds=900*i)
-    #    print(start_time)
-    #    NEW_START = start_time.strftime("%Y-%m-%d %H:%M:%S")
-    #    print(NEW_START)
-    #    print('#'*100)
-    #    print('A new simulation!')
-    #    run_mosaik_demo.main(sim_config, NEW_START, PERIOD, PV_DATA, PROFILE_FILE, GRID_NAME, GRID_FILE)
-    #    transactions_between_nodes('1', bus_dict)
+    parser = OptionParser()
+    parser.add_option("-t", "--task", type="string", dest="task", default='simulate')
+    parser.add_option("-p", "--para", type="int", dest="para", default=1)
+    (options, args) = parser.parse_args()
+    task = options.task
+    para = options.para
+    print(type(task), type(para))
+    print(task, para)
+    if task == 'register':
+        register_nodes('%d'%para)
+    elif task == 'simulate':
+        bus_ids, branch_link_info = read_config_file()
+        bus_dict = {}
+        for bus in bus_ids:
+            bus_dict[bus] = 0
+        for i in range(int(NUM_OF_SIM)):
+            start_time = datetime.datetime.strptime(START, "%Y-%m-%d %H:%M:%S")
+            print(start_time)
+            start_time += datetime.timedelta(seconds=900*i)
+            print(start_time)
+            NEW_START = start_time.strftime("%Y-%m-%d %H:%M:%S")
+            print(NEW_START)
+            print('#'*100)
+            print('A new simulation!')
+            run_mosaik_demo.main(sim_config, NEW_START, PERIOD, PV_DATA, PROFILE_FILE, GRID_NAME, GRID_FILE)
+            transactions_between_nodes('%d'%para, bus_dict)
